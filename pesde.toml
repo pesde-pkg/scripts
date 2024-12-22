@@ -1,6 +1,6 @@
 name = "pesde/scripts_core"
 version = "0.0.1"
-# pesde_version = "0.5.1+registry.0.1.0" # FIXME: pesde needs to fix versioning here
+pesde_version = "0.5.2"
 description = "Scripts and other utilities for use with pesde"
 authors = [
   "daimond113 <contact@daimond113.com> (https://www.daimond113.com/)",
