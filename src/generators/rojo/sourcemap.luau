@@ -4,6 +4,7 @@ local serde = require("@lune/serde")
 local stdio = require("@lune/stdio")
 
 local PLATFORM_SEP = if process.os == "windows" then "\\" else "/"
+_G.interactive = false
 
 -- A mapping of things to do depending on the file present
 local PATH_ACTION_MAP: { [string]: (dir: string) -> number? } = {

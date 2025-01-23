@@ -49,6 +49,7 @@ export type SyncConfig = {
 }
 
 local PLATFORM_SEP = if process.os == "windows" then "\\" else "/"
+_G.interactive = false
 
 --- Generates a Rojo sync configuration file (`default.project.json`) from a list of
 --- input files to be included.

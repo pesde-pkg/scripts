@@ -8,6 +8,8 @@ export type DataModelTree = rojoSyncConfig.DataModelTree
 export type Tree = rojoSyncConfig.Tree 
 export type SyncConfig = rojoSyncConfig.SyncConfig 
 
+_G.interactive = false
+
 --- Generates an Argon sync configuration file (`default.project.json`) from a list of
 --- input files to be included.
 
