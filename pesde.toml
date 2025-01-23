@@ -16,7 +16,7 @@ includes = [
   "LICENSE",
 ]
 
-workspace_members = [".", ".pesde/*"]
+workspace_members = [".", ".pesde/*", "!.pesde/.gitkeep"]
 
 [meta.scripts.rojo]
 version = "0.1.0"

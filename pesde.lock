@@ -2,6 +2,9 @@ name = "pesde/scripts_core"
 version = "0.0.2"
 target = "lune"
 
+[workspace."pesde/scripts_argon"]
+lune = ".pesde/argon"
+
 [workspace."pesde/scripts_core"]
 lune = ""
 
