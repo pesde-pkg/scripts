@@ -104,6 +104,17 @@ return function(
 		}
 	end
 
+	-- If the config tree does not include pesde's downloaded roblox server dependencies
+	-- directory, we add it as an optional one for the future, once server dependencies
+	-- are installed
+	if not syncConfigTree["roblox_server_packages"] then
+		syncConfigTree["roblox_server_packages"] = {
+			["$path"] = {
+				optional = "roblox_server_packages",
+			},
+		}
+	end
+
 	-- Finally, we serialize the config to a JSON string and optionally write it
 	-- to the sync config path
 	local serializedConfig =
