@@ -1,5 +1,5 @@
 name = "pesde/scripts_core"
-version = "0.0.2"
+version = "0.0.3"
 description = "Scripts and other utilities for use with pesde"
 authors = [
   "daimond113 <contact@daimond113.com> (https://www.daimond113.com/)",
