@@ -1,6 +1,5 @@
 name = "pesde/scripts_core"
 version = "0.0.2"
-pesde_version = "0.5.3"
 description = "Scripts and other utilities for use with pesde"
 authors = [
   "daimond113 <contact@daimond113.com> (https://www.daimond113.com/)",
@@ -17,6 +16,9 @@ includes = [
 ]
 
 workspace_members = [".", ".pesde/*", "!.pesde/.gitkeep"]
+
+[engines]
+pesde = "0.6.0-rc.5"
 
 [meta.scripts.rojo]
 version = "0.1.0"
