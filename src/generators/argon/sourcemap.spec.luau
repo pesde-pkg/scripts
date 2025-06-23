@@ -16,12 +16,12 @@ local BUILTIN_PATCHES: {
 		spawn = function(
 			program: string,
 			params: { string },
-			options: process.SpawnOptions
-		): process.SpawnResult
-			local patchedOptions: process.SpawnOptions = options or {}
+			options: process.ExecOptions
+		): process.ExecResult
+			local patchedOptions: process.ExecOptions = options or {}
 			patchedOptions.stdio = "default"
 
-			local result = process.spawn(program, params, patchedOptions)
+			local result = process.exec(program, params, patchedOptions)
 
 			-- First we make sure the command exited properly
 			assert(
@@ -67,7 +67,7 @@ return function(test: typeof(frktest.test))
 					-- Skip files that are not project directories
 					continue
 				end
-				
+
 				test.case(entry, function()
 					-- If a file starts with `bad_` but not `bad_meta_`, we should expect a failure
 					-- Also, sorry about this shitty regex, regex-rs does not support look-around :(

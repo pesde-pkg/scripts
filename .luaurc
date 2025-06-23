@@ -1,7 +1,10 @@
 {
-    "languageMode": "nonstrict",
-    "lint": {
-        "*": true,
-        "TableOperations": false
-    }
+  "languageMode": "nonstrict",
+  "lint": {
+    "*": true,
+    "TableOperations": false
+  },
+  "aliases": {
+    "lune": "~/.lune/.typedefs/0.9.4/"
+  }
 }

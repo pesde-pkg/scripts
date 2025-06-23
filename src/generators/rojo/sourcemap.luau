@@ -9,7 +9,7 @@ _G.interactive = false
 -- A mapping of things to do depending on the file present
 local PATH_ACTION_MAP: { [string]: (dir: string) -> number? } = {
 	["default.project.json"] = function(dir)
-		return process.spawn("rojo", { "sourcemap", dir }, {
+		return process.exec("rojo", { "sourcemap", dir }, {
 			cwd = process.cwd,
 			env = process.env,
 			stdio = "forward",

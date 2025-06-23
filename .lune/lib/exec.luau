@@ -71,7 +71,7 @@ end
 
 local function intoSpawnOptionsStdioKind(
 	strategy: StdioStrategy
-): process.SpawnOptionsStdioKind
+): process.ExecStdioKind
 	if strategy == "pipe" then
 		return "default"
 	end
@@ -87,7 +87,7 @@ local function intoSpawnOptionsStdioKind(
 	error(`Non-strategy provided: {strategy}`)
 end
 
-function CommandBuilder.exec(self: CommandBuilder): process.SpawnResult
+function CommandBuilder.exec(self: CommandBuilder): process.ExecResult
 	print(
 		"$",
 		stdio.style("dim") .. self.program,
@@ -95,7 +95,7 @@ function CommandBuilder.exec(self: CommandBuilder): process.SpawnResult
 	)
 
 	local function translateIoStrategyMappings(mappings: IoStrategyMapping)
-		local translatedMappings: process.SpawnOptionsStdio = {}
+		local translatedMappings: process.ExecStdioOptions = {}
 		for field, value in mappings do
 			translatedMappings[field] = intoSpawnOptionsStdioKind(value)
 		end
@@ -103,7 +103,7 @@ function CommandBuilder.exec(self: CommandBuilder): process.SpawnResult
 		return translatedMappings
 	end
 
-	local child = process.spawn(self.program, self.args, {
+	local child = process.exec(self.program, self.args, {
 		shell = true,
 		stdio = translateIoStrategyMappings(
 			self.stdioStrategy or DEFAULT_STDIO_STRATEGY

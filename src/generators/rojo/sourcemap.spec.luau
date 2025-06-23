@@ -22,12 +22,12 @@ local BUILTIN_PATCHES: {
 		spawn = function(
 			program: string,
 			params: { string },
-			options: process.SpawnOptions
-		): process.SpawnResult
-			local patchedOptions: process.SpawnOptions = options or {}
+			options: process.ExecOptions
+		): process.ExecResult
+			local patchedOptions: process.ExecOptions = options or {}
 			patchedOptions.stdio = "default"
 
-			local result = process.spawn(program, params, patchedOptions)
+			local result = process.exec(program, params, patchedOptions)
 
 			-- First we make sure the command exited properly
 			assert(
@@ -72,7 +72,7 @@ return function(test: typeof(frktest.test))
 					-- It does not make sense to test sourcemap generation for some of the test projects
 					continue
 				end
-				
+
 				local path = `{TEST_PROJECTS_DIR}/{entry}`
 				test.case(entry, function()
 					-- If a file starts with `bad_` but not `bad_meta_`, we should expect a failure

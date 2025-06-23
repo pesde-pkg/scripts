@@ -18,7 +18,8 @@ includes = [
 workspace_members = [".", ".pesde/*", "!.pesde/.gitkeep"]
 
 [engines]
-pesde = "0.6.0-rc.5"
+pesde = "^0.7.0-rc.1"
+lune = "^0.9.4"
 
 [meta.scripts.rojo]
 version = "0.1.0"
@@ -34,7 +35,7 @@ lib = "src/init.luau"
 
 [dev_dependencies]
 frktest = { name = "itsfrank/frktest", version = "^0.0.2" }
-pathfs = { name = "jiwonz/pathfs", version = "^0.1.0" }
+pathfs = { name = "jiwonz/pathfs", version = "^0.5.2" }
 luau-lsp = { name = "pesde/luau_lsp", version = "^1.36.0" }
 stylua = { name = "pesde/stylua", version = "^2.0.1" }
 argon = { name = "pesde/argon", version = "^2.0.21" }

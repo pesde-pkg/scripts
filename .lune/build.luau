@@ -8,9 +8,10 @@ local task = require("@lune/task")
 local lib = require("../src")
 local manifest = require("./lib/manifest")
 local pathfs = require("../lune_packages/pathfs")
+local fs = pathfs.fs
 
 type ToolChoice = "rojo"
-local SCRIPTS_DIR = pathfs.getAbsolutePathOf(pathfs.Path.from(".pesde"))
+local SCRIPTS_DIR = pathfs.absolute(pathfs.Path.from(".pesde"))
 local MANIFEST = manifest(nil, (nil :: any) :: { meta: manifest.PesdeManifest })
 local SCRIPTS = {
 	syncConfigGenerator = [[local process = require("@lune/process")
@@ -18,7 +19,7 @@ local SCRIPTS = {
 local args = table.clone(process.args)
 local ok, _ =
 require("./lune_packages/core").generators.%s.syncConfig(table.remove(args, 1), args, { writeToFile = true })
-if not ok then 
+if not ok then
 	return process.exit(1)
 end]],
 
@@ -82,7 +83,7 @@ local function installDeps(): number
 					"\x1b[2D\x1b[0K"
 				)
 
-				-- Wait 10ms between each spinner state 
+				-- Wait 10ms between each spinner state
 				task.wait(0.1)
 			end
 		end
@@ -91,7 +92,7 @@ local function installDeps(): number
 	-- `process_spawn` is an async rust function, so tokio spawns a hardware
 	-- thread and mlua will yield the current thread, allowing for `spinnerThread`
 	-- to continue executing
-	local child = process.spawn("/home/usr/.pesde/bin/pesde", { "install" }, {
+	local child = process.exec("pesde", { "install" }, {
 		stdio = "default",
 	})
 
@@ -128,8 +129,8 @@ for tool, generators in lib.generators do
 	local toolScriptsDir = SCRIPTS_DIR:join(toolChoice)
 	local toolMeta = MANIFEST.meta.scripts[toolChoice]
 
-	if not pathfs.isDir(toolScriptsDir) then
-		pathfs.writeDir(toolScriptsDir)
+	if not fs.isDir(toolScriptsDir) then
+		fs.writeDir(toolScriptsDir)
 	end
 
 	local capitalisedToolChoice = string.gsub(toolChoice, "^%l", string.upper)
@@ -179,19 +180,19 @@ for tool, generators in lib.generators do
 		string.format(SCRIPTS.sourcemapGenerator, toolChoice)
 
 	-- Finally, write all the generated files
-	pathfs.writeFile(
+	fs.writeFile(
 		toolScriptsDir:join("pesde.toml"),
 		serde.encode("toml", toolManifest, true)
 	)
-	pathfs.writeFile(
+	fs.writeFile(
 		toolScriptsDir:join("roblox_sync_config_generator.luau"),
 		syncConfigGeneratorScript
 	)
-	pathfs.writeFile(
+	fs.writeFile(
 		toolScriptsDir:join("sourcemap_generator.luau"),
 		sourcemapGeneratorScript
 	)
-	pathfs.writeFile(
+	fs.writeFile(
 		toolScriptsDir:join("README.md"),
 		string.format(
 			README_TMPL,
@@ -200,8 +201,8 @@ for tool, generators in lib.generators do
 			capitalisedToolChoice
 		)
 	)
-	pathfs.copy(
-		pathfs.cwd:join("LICENSE"),
+	fs.copy(
+		pathfs.cwd():join("LICENSE"),
 		toolScriptsDir:join("LICENSE"),
 		true
 	)
@@ -216,4 +217,4 @@ for tool, generators in lib.generators do
 end
 
 -- Now we install the dependencies for the newly created projects
-process.exit(installDeps())
+-- process.exit(installDeps())
