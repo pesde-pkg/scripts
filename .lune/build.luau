@@ -10,7 +10,7 @@ local manifest = require("./lib/manifest")
 local pathfs = require("../lune_packages/pathfs")
 
 type ToolChoice = "rojo"
-local SCRIPTS_DIR = pathfs.getAbsolutePathOf(pathfs.Path.from(".pesde"))
+local SCRIPTS_DIR = pathfs.getAbsolutePathOf(pathfs.Path.from("dist"))
 local MANIFEST = manifest(nil, (nil :: any) :: { meta: manifest.PesdeManifest })
 local SCRIPTS = {
 	syncConfigGenerator = [[local process = require("@lune/process")

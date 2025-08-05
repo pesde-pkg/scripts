@@ -1,5 +1,5 @@
 name = "pesde/scripts_core"
-version = "0.0.3"
+version = "0.1.0"
 description = "Scripts and other utilities for use with pesde"
 authors = [
   "daimond113 <contact@daimond113.com> (https://www.daimond113.com/)",
@@ -15,13 +15,13 @@ includes = [
   "LICENSE",
 ]
 
-workspace_members = [".", ".pesde/*", "!.pesde/.gitkeep"]
+workspace_members = [".", "dist/*"]
 
 [engines]
-pesde = "0.6.0-rc.5"
+pesde = "^0.6.0"
 
 [meta.scripts.rojo]
-version = "0.1.0"
+version = "0.1.1"
 tool_dependencies = { rojo = { name = "pesde/rojo", version = "^7.4.4" } }
 
 [meta.scripts.argon]

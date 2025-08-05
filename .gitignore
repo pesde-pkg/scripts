@@ -3,5 +3,4 @@
 pesde.lock
 
 # Generated scripts
-.pesde/**
-!.pesde/.gitkeep
+dist/**
