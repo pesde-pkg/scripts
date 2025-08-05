@@ -117,8 +117,10 @@ return function(
 
 	-- Finally, we serialize the config to a JSON string and optionally write it
 	-- to the sync config path
-	local serializedConfig =
-		serde.encode("json", { tree = syncConfigTree }, true)
+	local serializedConfig = serde.encode("json", {
+		name = string.match(packageDirectory, "[^\\/]+$"),
+		tree = syncConfigTree,
+	}, true)
 	if options.writeToFile then
 		fs.writeFile(syncConfigPath, serializedConfig)
 	end
