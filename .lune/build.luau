@@ -91,9 +91,7 @@ local function installDeps(): number
 	-- `process_spawn` is an async rust function, so tokio spawns a hardware
 	-- thread and mlua will yield the current thread, allowing for `spinnerThread`
 	-- to continue executing
-	local child = process.spawn("/home/usr/.pesde/bin/pesde", { "install" }, {
-		stdio = "default",
-	})
+	local child = process.spawn("pesde", { "install" }, { stdio = "default" })
 
 	-- If we reach this point, that means mlua resumed the current thread and
 	-- `process_spawn` returned or errored. We can now close `spinnerThread` and
