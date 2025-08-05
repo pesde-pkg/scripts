@@ -1,7 +1,5 @@
 {
   "luau-lsp.require.mode": "relativeToFile",
-  "luau-lsp.require.directoryAliases": {
-    "@lune/": "~/.lune/.typedefs/0.8.9/"
-  },
-  "stylua.targetReleaseVersion": "latest"
+  "luau-lsp.require.useOriginalRequireByStringSemantics": true,
+  "stylua.targetReleaseVersion": "latest",
 }

@@ -3,5 +3,8 @@
     "lint": {
         "*": true,
         "TableOperations": false
+    },
+    "aliases": {
+        "lune": "~/.lune/.typedefs/0.8.9/"
     }
 }
