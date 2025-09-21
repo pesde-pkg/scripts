@@ -13,8 +13,8 @@ Scripts and other utilities for use with pesde.
 
 To ensure proper functionality, please make sure you have the following dependencies installed:
 
-- **pesde**: Version `>= 0.5.0-rc.15`
-- **lune**: Version `>= 0.8.9`
+- **pesde**: Version `^0.7.0`
+- **lune**: Version `^0.10.2`
 
 ## Usage
 
