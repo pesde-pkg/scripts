@@ -18,27 +18,33 @@ includes = [
 workspace_members = [".", "dist/*"]
 
 [engines]
-pesde = "^0.6.0"
+pesde = "^0.7.0"
+lune = "^0.10.2"
 
 [meta.scripts.rojo]
 version = "0.1.1"
-tool_dependencies = { rojo = { name = "pesde/rojo", version = "^7.4.4" } }
+# tool_dependencies = { rojo = { name = "pesde/rojo", version = "^7.5.1" } }
+tool_dependencies = { rojo = { repo = "https://github.com/pesde-pkg/tooling", rev = "6cbcddb", path = "bins/rojo" } }
 
 [meta.scripts.argon]
 version = "0.1.0"
-tool_dependencies = { argon = { name = "pesde/argon", version = "^2.0.21" } }
+# tool_dependencies = { argon = { name = "pesde/argon", version = "^2.0.26" } }
+tool_dependencies = { argon = { repo = "https://github.com/pesde-pkg/tooling", rev = "6cbcddb", path = "bins/argon" } }
 
 [target]
 environment = "lune"
 lib = "src/init.luau"
 
 [dev_dependencies]
-frktest = { name = "itsfrank/frktest", version = "^0.0.2" }
-pathfs = { name = "jiwonz/pathfs", version = "^0.1.0" }
-luau-lsp = { name = "pesde/luau_lsp", version = "^1.36.0" }
-stylua = { name = "pesde/stylua", version = "^2.0.1" }
-argon = { name = "pesde/argon", version = "^2.0.21" }
-rojo = { name = "pesde/rojo", version = "^7.4.4" }
+frktest = { name = "itsfrank/frktest", version = "^0.0.4", target = "luau" }
+pathfs = { name = "jiwonz/pathfs", version = "^0.6.0" }
+luau_lsp = { name = "pesde/luau_lsp", version = "^1.53.5" }
+# stylua = { name = "pesde/stylua", version = "^2.2.0" }
+# argon = { name = "pesde/argon", version = "^2.0.26" }
+# rojo = { name = "pesde/rojo", version = "^7.5.1" }
+stylua = { repo = "https://github.com/pesde-pkg/tooling", rev = "6cbcddb", path = "bins/stylua" }
+argon = { repo = "https://github.com/pesde-pkg/tooling", rev = "6cbcddb", path = "bins/argon" }
+rojo = { repo = "https://github.com/pesde-pkg/tooling", rev = "6cbcddb", path = "bins/rojo" }
 
 [indices]
 default = "https://github.com/pesde-pkg/index"
