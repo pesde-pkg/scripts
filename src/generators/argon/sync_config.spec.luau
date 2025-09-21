@@ -1,7 +1,7 @@
 local fs = require("@lune/fs")
 local serde = require("@lune/serde")
 
-local frktest = require("../../../lune_packages/frktest")
+local frktest = require("../../../luau_packages/frktest")
 local check = frktest.assert.check
 
 local syncConfig = require("./sync_config")
@@ -26,7 +26,7 @@ return function(test: typeof(frktest.test))
 
 				-- Make sure that the generated config and the real configs are similar
 				local generatedConfig, realConfig =
-					serde.decode("json", config),
+					serde.decode("json", config :: string),
 					serde.decode(
 						"json",
 						fs.readFile(`{path}/default.project.json`)

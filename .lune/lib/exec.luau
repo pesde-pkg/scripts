@@ -14,13 +14,15 @@ type CommandBuilderFields = {
 	args: { string },
 	stdioStrategy: IoStrategyMapping?,
 }
-export type StdioStrategy = "pipe" | "forward" | "none"
+export type StdioStrategy = "pipe" | "inherit" | "forward" | "none"
 export type IoStrategyMapping = {
+	stdin: StdioStrategy?,
 	stdout: StdioStrategy?,
 	stderr: StdioStrategy?,
 }
 
 local DEFAULT_STDIO_STRATEGY: IoStrategyMapping = {
+	stdin = "pipe",
 	stdout = "pipe",
 	stderr = "pipe",
 }
@@ -71,9 +73,13 @@ end
 
 local function intoSpawnOptionsStdioKind(
 	strategy: StdioStrategy
-): process.SpawnOptionsStdioKind
+): process.ExecStdioKind
 	if strategy == "pipe" then
 		return "default"
+	end
+
+	if strategy == "inherit" then
+		return "inherit"
 	end
 
 	if strategy == "forward" then
@@ -87,7 +93,7 @@ local function intoSpawnOptionsStdioKind(
 	error(`Non-strategy provided: {strategy}`)
 end
 
-function CommandBuilder.exec(self: CommandBuilder): process.SpawnResult
+function CommandBuilder.exec(self: CommandBuilder): process.ExecResult
 	print(
 		"$",
 		stdio.style("dim") .. self.program,
@@ -95,15 +101,16 @@ function CommandBuilder.exec(self: CommandBuilder): process.SpawnResult
 	)
 
 	local function translateIoStrategyMappings(mappings: IoStrategyMapping)
-		local translatedMappings: process.SpawnOptionsStdio = {}
+		local translatedMappings: process.ExecStdioOptions = {}
 		for field, value in mappings do
-			translatedMappings[field] = intoSpawnOptionsStdioKind(value)
+			translatedMappings[field] =
+				intoSpawnOptionsStdioKind(value :: StdioStrategy)
 		end
 
 		return translatedMappings
 	end
 
-	local child = process.spawn(self.program, self.args, {
+	local child = process.exec(self.program, self.args, {
 		shell = true,
 		stdio = translateIoStrategyMappings(
 			self.stdioStrategy or DEFAULT_STDIO_STRATEGY

@@ -3,8 +3,8 @@
 local fs = require("@lune/fs")
 local process = require("@lune/process")
 
-local frktest = require("../../lune_packages/frktest")
-local reporter = require("./reporter")
+local frktest = require("../luau_packages/frktest")
+local reporter = require("@self/reporter")
 
 -- HACK: Cast require to allow for dynamic paths in strict mode
 -- A more proper solution would be to use luau.load instead, but
@@ -20,7 +20,6 @@ local require = require :: (
 		{ __index = frktest.test }
 	))
 ) -> ()
-
 
 local function discoverTests(dir: string): { string }
 	local tests = {}
@@ -54,14 +53,12 @@ for _, test in discoverTests("src") do
 	-- So, to include only a certain set of test files, you can provide either
 	-- the full path of the test file or name of the test file, with or without
 	-- the `.spec.luau` extension
-	local baseName = string.match(test, "([^/\\]+)$")
-
-	local withoutExt = string.sub(test, 1, -11)
-	local baseNameWithoutExt = string.match(withoutExt, "([^/\\]+)$")
-
+	local baseName = string.match(test, "([^/\\]+)$") :: string
+	local baseNameWithoutExt = string.gsub(baseName, "%.luau$", "")
+	local testPath = string.gsub(test, "%.luau$", "")
 	local isAllowed = #process.args == 0
 		or table.find(allowedTests, test)
-		or table.find(allowedTests, withoutExt)
+		or table.find(allowedTests, testPath)
 		or table.find(allowedTests, baseName)
 		or table.find(allowedTests, baseNameWithoutExt)
 
@@ -75,7 +72,7 @@ for _, test in discoverTests("src") do
 		constructors.suite = frktest.test.skip.suite
 	end
 
-	require(`../../{test}`)(
+	require(`../{testPath}`)(
 		setmetatable(constructors, { __index = frktest.test })
 	)
 end

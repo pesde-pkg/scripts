@@ -4,7 +4,7 @@ local process = require("@lune/process")
 local regex = require("@lune/regex")
 local serde = require("@lune/serde")
 
-local frktest = require("../../../lune_packages/frktest")
+local frktest = require("../../../luau_packages/frktest")
 local check = frktest.assert.check
 
 local TEST_PROJECTS_DIR = "./test-files/rojo/test-projects"
@@ -22,12 +22,12 @@ local BUILTIN_PATCHES: {
 		spawn = function(
 			program: string,
 			params: { string },
-			options: process.SpawnOptions
-		): process.SpawnResult
-			local patchedOptions: process.SpawnOptions = options or {}
+			options: process.ExecOptions
+		): process.ExecResult
+			local patchedOptions: process.ExecOptions = options or {}
 			patchedOptions.stdio = "default"
 
-			local result = process.spawn(program, params, patchedOptions)
+			local result = process.exec(program, params, patchedOptions)
 
 			-- First we make sure the command exited properly
 			assert(
@@ -56,11 +56,11 @@ local BUILTIN_PATCHES: {
 local function requireWithPatches(path: string)
 	for builtin, patch in BUILTIN_PATCHES do
 		if path == builtin then
-			return setmetatable(patch, { __index = require(builtin) })
+			return setmetatable(patch, { __index = (require)(builtin) })
 		end
 	end
 
-	return require(path)
+	return (require)(path)
 end
 
 return function(test: typeof(frktest.test))
@@ -72,7 +72,7 @@ return function(test: typeof(frktest.test))
 					-- It does not make sense to test sourcemap generation for some of the test projects
 					continue
 				end
-				
+
 				local path = `{TEST_PROJECTS_DIR}/{entry}`
 				test.case(entry, function()
 					-- If a file starts with `bad_` but not `bad_meta_`, we should expect a failure
@@ -80,7 +80,9 @@ return function(test: typeof(frktest.test))
 					local isBadMeta = regex.new(
 						"^bad_[^m]|^bad_m[^e]|^bad_me[^t]|^bad_met[^a]"
 					)
-					local expect = if isBadMeta:isMatch(entry)
+					local expect: ((...any) -> any?) -> nil = if isBadMeta:isMatch(
+							entry
+						)
 						then check.should_error
 						else check.should_not_error
 

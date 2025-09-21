@@ -9,26 +9,26 @@ local lib = require("../src")
 local manifest = require("./lib/manifest")
 local pathfs = require("../lune_packages/pathfs")
 
-type ToolChoice = "rojo"
-local SCRIPTS_DIR = pathfs.getAbsolutePathOf(pathfs.Path.from("dist"))
+type ToolChoice = "rojo" | "argon"
+local SCRIPTS_DIR = pathfs.absolute(pathfs.Path.from("dist"))
 local MANIFEST = manifest(nil, (nil :: any) :: { meta: manifest.PesdeManifest })
 local SCRIPTS = {
 	syncConfigGenerator = [[local process = require("@lune/process")
 
 local args = table.clone(process.args)
-local ok, _ =
-require("./lune_packages/core").generators.%s.syncConfig(table.remove(args, 1), args, { writeToFile = true })
+local ok, _ = require("./lune_packages/scripts_core").generators.%s.syncConfig(table.remove(args, 1), args, { writeToFile = true })
+
 if not ok then 
 	return process.exit(1)
 end]],
 
 	sourcemapGenerator = [[local process = require("@lune/process")
 
-local ok = require("./lune_packages/core").generators.%s.sourcemap(process.args[1])
+local ok = require("./lune_packages/scripts_core").generators.%s.sourcemap(process.args[1])
+
 if not ok then
 	return process.exit(1)
-end
-]],
+end]],
 }
 
 local README_TMPL = [[# `pesde/scripts_%s`
@@ -82,7 +82,7 @@ local function installDeps(): number
 					"\x1b[2D\x1b[0K"
 				)
 
-				-- Wait 10ms between each spinner state 
+				-- Wait 10ms between each spinner state
 				task.wait(0.1)
 			end
 		end
@@ -91,7 +91,7 @@ local function installDeps(): number
 	-- `process_spawn` is an async rust function, so tokio spawns a hardware
 	-- thread and mlua will yield the current thread, allowing for `spinnerThread`
 	-- to continue executing
-	local child = process.spawn("pesde", { "install" }, { stdio = "default" })
+	local child = process.exec("pesde", { "install" }, { stdio = "default" })
 
 	-- If we reach this point, that means mlua resumed the current thread and
 	-- `process_spawn` returned or errored. We can now close `spinnerThread` and
@@ -122,12 +122,12 @@ for tool, generators in lib.generators do
 	local startTime = os.clock()
 
 	-- For each tool, we generate a respective manifests and scripts
-	local toolChoice = tool :: ToolChoice
+	local toolChoice: ToolChoice = tool
 	local toolScriptsDir = SCRIPTS_DIR:join(toolChoice)
 	local toolMeta = MANIFEST.meta.scripts[toolChoice]
 
-	if not pathfs.isDir(toolScriptsDir) then
-		pathfs.writeDir(toolScriptsDir)
+	if not pathfs.fs.isDir(toolScriptsDir) then
+		pathfs.fs.writeDir(toolScriptsDir)
 	end
 
 	local capitalisedToolChoice = string.gsub(toolChoice, "^%l", string.upper)
@@ -144,7 +144,7 @@ for tool, generators in lib.generators do
 			"Erica Marigold <hi@devcomp.xyz>",
 		},
 		repository = "https://github.com/pesde-pkg/scripts",
-		license = "MIT",
+		license = "MIT" :: "MIT",
 		includes = {
 			"roblox_sync_config_generator.luau",
 			"sourcemap_generator.luau",
@@ -153,8 +153,13 @@ for tool, generators in lib.generators do
 			"LICENSE",
 		},
 
+		engines = {
+			pesde = "^0.7.0",
+			lune = "^0.10.2",
+		},
+
 		target = {
-			environment = "lune",
+			environment = "lune" :: "lune",
 			scripts = {
 				roblox_sync_config_generator = "roblox_sync_config_generator.luau",
 				sourcemap_generator = "sourcemap_generator.luau",
@@ -163,7 +168,7 @@ for tool, generators in lib.generators do
 
 		peer_dependencies = toolMeta.tool_dependencies,
 		dependencies = {
-			core = { workspace = "pesde/scripts_core", version = "^" },
+			scripts_core = { workspace = "pesde/scripts_core", version = "^" },
 		},
 
 		indices = {
@@ -177,19 +182,19 @@ for tool, generators in lib.generators do
 		string.format(SCRIPTS.sourcemapGenerator, toolChoice)
 
 	-- Finally, write all the generated files
-	pathfs.writeFile(
+	pathfs.fs.writeFile(
 		toolScriptsDir:join("pesde.toml"),
 		serde.encode("toml", toolManifest, true)
 	)
-	pathfs.writeFile(
+	pathfs.fs.writeFile(
 		toolScriptsDir:join("roblox_sync_config_generator.luau"),
 		syncConfigGeneratorScript
 	)
-	pathfs.writeFile(
+	pathfs.fs.writeFile(
 		toolScriptsDir:join("sourcemap_generator.luau"),
 		sourcemapGeneratorScript
 	)
-	pathfs.writeFile(
+	pathfs.fs.writeFile(
 		toolScriptsDir:join("README.md"),
 		string.format(
 			README_TMPL,
@@ -198,8 +203,8 @@ for tool, generators in lib.generators do
 			capitalisedToolChoice
 		)
 	)
-	pathfs.copy(
-		pathfs.cwd:join("LICENSE"),
+	pathfs.fs.copy(
+		pathfs.cwd():join("LICENSE"),
 		toolScriptsDir:join("LICENSE"),
 		true
 	)

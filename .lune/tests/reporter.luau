@@ -1,7 +1,7 @@
 local stdio = require("@lune/stdio")
 
-local frktest = require("../../lune_packages/frktest")
-local Reporter = frktest._reporters.lune_console_reporter
+local frktest = require("../../luau_packages/frktest")
+local Reporter = frktest.reporters.console_reporter
 
 local watch = require("../lib/channel")
 
@@ -55,7 +55,7 @@ function ReporterExt.init()
 			if test.failed then "error" else "success",
 
 			-- Await receival of the timestamp and convert the difference to ms
-			(os.clock() - recv_ts()) * 1000
+			(os.clock() - recv_ts() :: number) * 1000
 		))
 	end)
 

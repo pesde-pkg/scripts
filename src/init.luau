@@ -1,13 +1,13 @@
 return {
 	generators = {
 		rojo = {
-			sourcemap = require("./generators/rojo/sourcemap"),
-			syncConfig = require("./generators/rojo/sync_config"),
+			sourcemap = require("@self/generators/rojo/sourcemap"),
+			syncConfig = require("@self/generators/rojo/sync_config"),
 		},
 
 		argon = {
-			sourcemap = require("./generators/argon/sourcemap"),
-			syncConfig = require("./generators/argon/sync_config"),
-		}
+			sourcemap = require("@self/generators/argon/sourcemap"),
+			syncConfig = require("@self/generators/argon/sync_config"),
+		},
 	},
 }
