@@ -80,7 +80,7 @@ return function(test: typeof(frktest.test))
 					local isBadNotMeta = regex.new(
 						"^bad_[^m]|^bad_m[^e]|^bad_me[^t]|^bad_met[^a]"
 					)
-					local expect: ((...any) -> any?) -> nil = if isBadNotMeta:isMatch(entry)
+					local expect: (boolean) -> nil = if isBadNotMeta:isMatch(entry)
 						then check.is_false
 						else check.is_true
 
