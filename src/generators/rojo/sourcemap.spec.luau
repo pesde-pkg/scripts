@@ -19,7 +19,7 @@ local BUILTIN_PATCHES: {
 	[string]: { [string]: (...any) -> ...any? },
 } = {
 	["@lune/process"] = {
-		spawn = function(
+		exec = function(
 			program: string,
 			params: { string },
 			options: process.ExecOptions
@@ -80,11 +80,11 @@ return function(test: typeof(frktest.test))
 					local isBadNotMeta = regex.new(
 						"^bad_[^m]|^bad_m[^e]|^bad_me[^t]|^bad_met[^a]"
 					)
-					local expect: (boolean) -> nil = if isBadNotMeta:isMatch(entry)
-						then check.is_false
-						else check.is_true
+					local expect: ((...any) -> any?) -> nil = if isBadNotMeta:isMatch(entry)
+						then check.should_error
+						else check.should_not_error
 
-					expect((function()
+					expect(function()
 						-- We override the require which applies some patches to some builtins, mainly preventing
 						-- command stdout forwarding and `stdio.write` outputs to stdout in order to not fill
 						-- test ouput with large amounts of JSON data
@@ -97,8 +97,8 @@ return function(test: typeof(frktest.test))
 							}
 						)()
 
-						return sourcemap(path)
-					end)())
+						return check.is_true(sourcemap(path))
+					end)
 				end)
 			end
 		end

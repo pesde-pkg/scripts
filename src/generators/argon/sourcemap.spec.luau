@@ -13,7 +13,7 @@ local BUILTIN_PATCHES: {
 	[string]: { [string]: (...any) -> ...any? },
 } = {
 	["@lune/process"] = {
-		spawn = function(
+		exec = function(
 			program: string,
 			params: { string },
 			options: process.ExecOptions
@@ -71,10 +71,10 @@ return function(test: typeof(frktest.test))
 				test.case(entry, function()
 					-- If a file starts with `bad_` but not `bad_meta_`, we should expect a failure
 					-- Also, sorry about this shitty regex, regex-rs does not support look-around :(
-					local isBadMeta = regex.new(
+					local isBadNotMeta = regex.new(
 						"^bad_[^m]|^bad_m[^e]|^bad_me[^t]|^bad_met[^a]"
 					)
-					local expect: ((...any) -> any?) -> nil = if isBadMeta:isMatch(
+					local expect: ((...any) -> any?) -> nil = if isBadNotMeta:isMatch(
 							entry
 						)
 						then check.should_error
