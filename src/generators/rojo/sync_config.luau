@@ -33,9 +33,11 @@ export type DataModelTree = TreeBase & {
 	[string]: TreeService,
 }
 
-export type Tree = (DataModelTree & {
-	["$className"]: "DataModel",
-}) | TreeNormal
+export type Tree =
+	(DataModelTree & {
+		["$className"]: "DataModel",
+	})
+	| TreeNormal
 
 export type SyncConfig = {
 	name: string,

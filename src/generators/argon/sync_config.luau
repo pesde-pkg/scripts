@@ -5,8 +5,8 @@ export type TreeBase = rojoSyncConfig.TreeBase
 export type TreeNormal = rojoSyncConfig.TreeNormal
 export type TreeService = rojoSyncConfig.TreeService
 export type DataModelTree = rojoSyncConfig.DataModelTree
-export type Tree = rojoSyncConfig.Tree 
-export type SyncConfig = rojoSyncConfig.SyncConfig 
+export type Tree = rojoSyncConfig.Tree
+export type SyncConfig = rojoSyncConfig.SyncConfig
 
 _G.interactive = false
 
@@ -26,5 +26,5 @@ return function(
 ): (boolean, string?)
 	-- Purely alias to the Rojo sync config generator, since Argon uses the same
 	-- config format
-	return rojoSyncConfig(packageDirectory, files, options)	
+	return rojoSyncConfig(packageDirectory, files, options)
 end
