@@ -81,10 +81,10 @@ return function(test: typeof(frktest.test))
 						"^bad_[^m]|^bad_m[^e]|^bad_me[^t]|^bad_met[^a]"
 					)
 					local expect: ((...any) -> any?) -> nil = if isBadNotMeta:isMatch(entry)
-						then check.should_error
-						else check.should_not_error
+						then check.is_false
+						else check.is_true
 
-					expect(function()
+					expect((function()
 						-- We override the require which applies some patches to some builtins, mainly preventing
 						-- command stdout forwarding and `stdio.write` outputs to stdout in order to not fill
 						-- test ouput with large amounts of JSON data
@@ -97,14 +97,8 @@ return function(test: typeof(frktest.test))
 							}
 						)()
 
-						local result = sourcemap(path)
-
-						if not result then
-							error("sourcemap generation returned false")
-						end
-
-						return check.is_true(result)
-					end)
+						return sourcemap(path)
+					end)())
 				end)
 			end
 		end
