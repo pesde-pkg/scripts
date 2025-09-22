@@ -1,4 +1,4 @@
 {
   "luau-lsp.completion.imports.requireStyle": "alwaysRelative",
-  "stylua.targetReleaseVersion": "latest",
+  "stylua.targetReleaseVersion": "latest"
 }

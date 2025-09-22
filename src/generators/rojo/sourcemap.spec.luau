@@ -77,12 +77,10 @@ return function(test: typeof(frktest.test))
 				test.case(entry, function()
 					-- If a file starts with `bad_` but not `bad_meta_`, we should expect a failure
 					-- Also, sorry about this shitty regex, regex-rs does not support look-around :(
-					local isBadMeta = regex.new(
+					local isBadNotMeta = regex.new(
 						"^bad_[^m]|^bad_m[^e]|^bad_me[^t]|^bad_met[^a]"
 					)
-					local expect: ((...any) -> any?) -> nil = if isBadMeta:isMatch(
-							entry
-						)
+					local expect: ((...any) -> any?) -> nil = if isBadNotMeta:isMatch(entry)
 						then check.should_error
 						else check.should_not_error
 
@@ -99,7 +97,13 @@ return function(test: typeof(frktest.test))
 							}
 						)()
 
-						return check.is_true(sourcemap(path))
+						local result = sourcemap(path)
+
+						if not result then
+							error("sourcemap generation returned false")
+						end
+
+						return check.is_true(result)
 					end)
 				end)
 			end
