@@ -106,7 +106,7 @@ result = [{ name = "lukadev_0/result", version = "^1.2.1", index = "https://gith
 toolchainlib = [{ repo = "https://github.com/pesde-pkg/tooling", rev = "6cbcddb", path = "toolchainlib" }, "standard"]
 
 [graph."pesde/luau_lsp@1.53.5 lune"]
-direct = ["luau_lsp", { name = "pesde/luau_lsp", version = "^1.53.5", index = "default" }, "dev"]
+direct = ["luau-lsp", { name = "pesde/luau_lsp", version = "^1.53.5", index = "default" }, "dev"]
 
 [graph."pesde/luau_lsp@1.53.5 lune".dependencies]
 option = ["lukadev_0/option@1.2.1 lune", "standard"]
